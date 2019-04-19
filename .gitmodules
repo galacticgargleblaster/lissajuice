@@ -1,3 +1,6 @@
 [submodule "simple2d"]
 	path = simple2d
 	url = https://github.com/simple2d/simple2d.git
+[submodule "liblist"]
+	path = liblist
+	url = https://github.com/galacticgargleblaster/liblist
