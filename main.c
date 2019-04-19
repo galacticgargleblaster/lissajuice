@@ -50,9 +50,9 @@ t_line *new_line(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat width)
   line->width = width;
   for (int i = 0; i < 4; i++)
   {
-    line->c[i].r = 100;
-    line->c[i].g = 100;
-    line->c[i].b = 100;
+    line->c[i].r = 0;
+    line->c[i].g = 0;
+    line->c[i].b = 1;
     line->c[i].a = 1;
   }
   return (line);
@@ -102,9 +102,19 @@ void render() {
   // Draw all the lines in the list
   t_element_container *container = lines->head;
   t_line *line;
+  float color = 1;
+  float increment = 1 / ((float)(lines->size));
   while (container)
   {
     line = container->element;
+    for (int i = 0; i < 4; i++)
+    {
+      line->c[i].r = color;
+      line->c[i].g = color;
+      line->c[i].b = color;
+      line->c[i].a = 1;
+    }
+    color -= increment;
     drawline(line);
     container = container->prev;
   }
