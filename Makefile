@@ -15,7 +15,7 @@ deps:
 	make -C liblist
 
 $(NAME): *.c 
-	clang -g $(INC) $(LIB) -llist -lsimple2d -D_THREAD_SAFE -lSDL2 -Wl,-framework,OpenGL -lSDL2_image -lSDL2_mixer -lSDL2_ttf $< -o $@
+	clang $(INC) $(LIB) -llist -lsimple2d -D_THREAD_SAFE -lSDL2 -Wl,-framework,OpenGL -lSDL2_image -lSDL2_mixer -lSDL2_ttf $< -o $@
 
 run: $(NAME)
 	./$(NAME)

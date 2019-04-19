@@ -1,0 +1,4 @@
+Why so slow?
+We're maxing out at 30fps, but only at 10% CPU utilization.  Does simple2d do some sort of frame rate limiting?
+
+the FPS cap is set at 60 in window.c

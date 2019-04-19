@@ -88,7 +88,6 @@ void drawline(t_line *line)
 #define MIDDLE_WIDTH ((double)WINDOW_WIDTH / 2)
 #define MIDDLE_HEIGHT ((double)WINDOW_HEIGHT / 2)
 
-double t = 0;
 
 #define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
 #define AMPLITUDE (((double)MIN(WINDOW_WIDTH, WINDOW_HEIGHT)) * 0.1)
@@ -109,24 +108,26 @@ void render() {
     drawline(line);
     container = container->prev;
   }
+}
 
+unsigned long ticks = 0;
+
+void calculate_lines_for_time(double t)
+{
+  t_line *line;
   double x1, x2, y1, y2;
 
   double tmp_x, tmp_y;
   // Calculate the next position
-  tmp_x = sin(2.0f * t) + sin(3.0f * t);
-  tmp_y = sin(3.0f * t) + sin(4.5f * t);
+  tmp_x = sin(2.0f * t) + sin(3.05f * t);
+  tmp_y = sin(3.0f * t) + sin(4.55f * t);
 
   x2 = AMPLITUDE * tmp_x + MIDDLE_WIDTH;
   y2 = AMPLITUDE * tmp_y + MIDDLE_HEIGHT;
 
-
   line = list_get_head(lines);
   x1 = (double)line->x2;
   y1 = (double)line->y2;
-  printf("x1: %.1f\ty1: %.1f\n", x1, y1);
-
-  t += TIMESTEP;
 
   // Pop the last line off the list, and calculate a new line
   if (lines->size < NUM_LINES)
@@ -139,14 +140,24 @@ void render() {
     line = list_pop_tail(lines);
     free(line);
   }
+}
 
+double global_t = 0;
+
+void update()
+{
+  // I think the units of ticks are milliseconds
+  while (ticks < SDL_GetTicks())
+  {
+    calculate_lines_for_time(global_t);
+    ticks+= (unsigned long)(1);
+    global_t += TIMESTEP;
+  }
 }
 
 int main() {
 
-  window = S2D_CreateWindow(
-    NAME, WINDOW_WIDTH, WINDOW_HEIGHT, NULL, render, 0
-  );
+  window = S2D_CreateWindow(NAME, WINDOW_WIDTH, WINDOW_HEIGHT, update, render, 0);
 
   fps = S2D_CreateText(font, "FPS:", font_size);
   fps->x = 430;
